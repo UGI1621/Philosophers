@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:16:27 by saan              #+#    #+#             */
-/*   Updated: 2025/04/26 06:59:27 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/26 09:19:05 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,19 @@
 
 int	main(int ac, char *av[])
 {
+	t_obs	obs;
+
 	// if (!(ac == 5) || !(ac == 6))
 	// 	e_w_m("ivac");
-
+	if (ft_atoi(av[1]) < 1)
+	{
+		e_w_m("ivpn");
+		return (1);
+	}
+	if (!init_cdll(obs, av))
+	{
+		e_w_m("ivav");
+		return (1);
+	}
+	// 노드 값 음수면 NULL리턴하니까 NULL리턴되면 싹다 프리하고 0 return시키고
 }
