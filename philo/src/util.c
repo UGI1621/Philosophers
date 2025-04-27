@@ -3,14 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:34:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/26 08:33:45 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/27 07:00:44 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	free_all_nodes(t_obs *obs)
+{
+	t_philo *cur;
+	t_philo *temp;
+
+	cur = obs->head;
+	while(cur)
+	{
+		temp = cur;
+		cur = temp->next;
+		free(temp);
+	}
+}
 
 int	ft_strcmp(char *str1, char *str2)
 {

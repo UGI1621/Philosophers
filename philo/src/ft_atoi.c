@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:49:53 by saan              #+#    #+#             */
-/*   Updated: 2025/04/26 08:50:01 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/27 07:30:14 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,16 @@ static int	ft_sign_check(char c, int *sign_cnt, int *ismin)
 	return (0);
 }
 
+static int	ft_isdigit(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
 int	ft_atoi(const char *nptr)
 {
-	long	res;
+	long long	res;
 	int		sign_cnt;
 	int		ismin;
 

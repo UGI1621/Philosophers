@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/26 09:09:32 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/27 11:21:46 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	init_obs(t_obs *obs)
+{
+	obs->head = NULL;
+	obs->is_dead = 0;
+	obs->is_met = -1;
+	obs->tail = NULL;
+}
 
 static t_philo	*make_philo_node(int i, char *av[])
 {
@@ -25,15 +33,10 @@ static t_philo	*make_philo_node(int i, char *av[])
 	cur->tts = ft_atoi(av[4]);
 	if (av[5])
 		cur->met = ft_atoi(av[5]);
-	if (is_valid_node(cur))
-	{
-		free(cur);
-		return (NULL);
-	}
 	return (cur);
 }
 
-int	init_cdll(t_obs *obs, char *av[])
+void	init_cdll(t_obs *obs, char *av[])
 {
 	t_philo	*node;
 	int	i;
