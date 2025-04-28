@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/04/27 11:17:30 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/28 10:50:58 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo
 typedef struct s_obs
 {
 	t_philo			*head;
+	pthread_mutex_t	*forks;
 	int				is_dead;	// anyone dead?
 	int				is_met;		// every one finish?
 	t_philo			*tail;
@@ -44,18 +45,19 @@ typedef struct s_obs
 
 // error.c
 int				e_w_m(char *e_str);
-
+int				e_w_f(char *e_str, t_obs *obs, int pn);
 // atoi.c
 int					ft_atoi(const char *nptr);
 
 // util.c
-void				free_all_nodes(t_obs *obs);
+void				free_all_nodes(t_obs *obs, int pn);
+void				destroy_all_mutex(pthread_mutex_t *forks, int idx);
 int					ft_strcmp(char *str1, char *str2);
 void				*ft_calloc(size_t number, size_t size);
 
 // init.c
-void	init_obs(t_obs *obs);
-void	init_cdll(t_obs *obs, char *av[]);
+int	init_obs(t_obs *obs, int pn);
+int	init_cdll(t_obs *obs, char *av[]);
 
 // vali.c
 int	is_valid_args(int ac, char *av[]);

@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:16:27 by saan              #+#    #+#             */
-/*   Updated: 2025/04/27 07:22:02 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/28 10:51:34 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,14 @@ int	main(int ac, char *av[])
 
 	if (!is_valid_args(ac, av))
 		return (1);
-	init_obs(&obs);
-	init_cdll(&obs, av);
-	free_all_nodes(&obs);
+	if (init_obs(&obs, ft_atoi(av[1])))
+		return (1);
+	if (init_cdll(&obs, av))
+		return (1);
+	int	i = -1;
+	while (++i < ft_atoi(av[1]))
+		pthread_mutex_lock(&obs.forks[i]);
+	free_all_nodes(&obs, ft_atoi(av[1]));
+	destroy_all_mutex(obs.forks, ft_atoi(av[1]));
 	return (0);
 }

@@ -6,19 +6,31 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:34:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/27 07:00:44 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/28 10:54:29 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	free_all_nodes(t_obs *obs)
+void	destroy_all_mutex(pthread_mutex_t *forks, int idx)
+{
+	int i;
+
+	i = -1;
+	while (++i < idx)
+		pthread_mutex_destroy(&forks[i]);
+	free(forks);
+}
+
+void	free_all_nodes(t_obs *obs, int pn)
 {
 	t_philo *cur;
 	t_philo *temp;
+	int i;
 
+	i = -1;
 	cur = obs->head;
-	while(cur)
+	while(++i < pn)
 	{
 		temp = cur;
 		cur = temp->next;
