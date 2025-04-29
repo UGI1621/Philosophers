@@ -6,11 +6,25 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:34:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/28 10:54:29 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/29 22:20:55 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	join_all_pthread(t_obs *obs, int pn)
+{
+	int	i;
+	t_philo *cur;
+
+	i = -1;
+	cur = obs->head;
+	while (++i < pn)
+	{
+		pthread_join(cur->tid, NULL);
+		cur = cur->next;
+	}
+}
 
 void	destroy_all_mutex(pthread_mutex_t *forks, int idx)
 {
@@ -67,6 +81,6 @@ void	*ft_calloc(size_t number, size_t size)
 	temp = (void *)malloc(number * size);
 	if (!temp)
 		return (NULL);
-	memset(temp, 0, size);
+	memset(temp, 0, number * size);
 	return (temp);
 }

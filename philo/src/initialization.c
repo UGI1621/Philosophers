@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/28 10:52:44 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/29 22:14:34 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ int	init_obs(t_obs *obs, int pn)
 	obs->is_dead = 0;
 	obs->is_met = -1;
 	obs->tail = NULL;
+	obs->is_lock = (int *)ft_calloc(pn, sizeof(int));
+	if (!obs->is_lock)
+		return (1);
 	obs->forks = (pthread_mutex_t *)ft_calloc(pn, sizeof(pthread_mutex_t));
 	i = -1;
 	while (++i < pn)
@@ -34,17 +37,22 @@ int	init_obs(t_obs *obs, int pn)
 	return (0);
 }
 
-static t_philo	*make_philo_node(int i, char *av[])
+static t_philo	*make_philo_node(t_obs *obs, int i, char *av[])
 {
 	t_philo *cur;
 
-	cur = ft_calloc(1, sizeof(t_philo));
+	cur = (t_philo *)calloc(1, sizeof(t_philo));
 	if (!cur)
 		return (NULL);
+	cur->tid = 0;
 	cur->pn = i + 1;
 	cur->ttd = ft_atoi(av[2]);
 	cur->tte = ft_atoi(av[3]);
 	cur->tts = ft_atoi(av[4]);
+	cur->l_f = &obs->forks[i];
+	cur->r_f = &obs->forks[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
+	cur->ll_f = &obs->is_lock[i];
+	cur->lr_f = &obs->is_lock[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
 	if (av[5])
 		cur->met = ft_atoi(av[5]);
 	return (cur);
@@ -58,7 +66,7 @@ int	init_cdll(t_obs *obs, char *av[])
 	i = -1;
 	while (++i < ft_atoi(av[1]))
 	{
-		node = make_philo_node(i, av);
+		node = make_philo_node(obs, i, av);
 		if (!node)
 			return (e_w_f("fmpn", obs, i));
 		if (!obs->head)
