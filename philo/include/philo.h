@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 10:21:04 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/30 11:38:30 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_philo
 	int				tts;	// time to sleep
 	int				met;	// must eat time
 	int				amid;
+	pthread_mutex_t *m_printf;
 	struct timeval	s_time;
 	struct s_philo	*next;
 }					t_philo;
@@ -43,6 +44,8 @@ typedef struct s_obs
 {
 	t_philo			*head;
 	pthread_t		tid;
+	pthread_mutex_t	m_printf;
+	int				ph_n;
 	int				is_dead;	// anyone dead?
 	int				is_met;		// every one finish?
 	t_philo			*tail;

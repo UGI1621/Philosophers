@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 10:21:23 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/30 11:38:40 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	init_obs(t_obs *obs, int pn)
 
 	obs->head = NULL;
 	obs->tid = 0;
+	obs->ph_n = pn;
 	obs->is_dead = 0;
 	obs->is_met = -1;
 	obs->tail = NULL;
@@ -46,6 +47,7 @@ static t_philo	*make_philo_node(t_obs *obs, int i, char *av[])
 	if (!cur)
 		return (NULL);
 	cur->tid = 0;
+	cur->m_printf = &obs->m_printf;
 	cur->amid = 0;
 	cur->pn = i + 1;
 	cur->ttd = ft_atoi(av[2]);
