@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:34:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/29 22:20:55 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/30 09:56:07 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	join_all_pthread(t_obs *obs, int pn)
 		pthread_join(cur->tid, NULL);
 		cur = cur->next;
 	}
+	pthread_join(obs->tid, NULL);
 }
 
 void	destroy_all_mutex(pthread_mutex_t *forks, int idx)

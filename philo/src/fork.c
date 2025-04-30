@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 20:55:57 by saan              #+#    #+#             */
-/*   Updated: 2025/04/29 23:52:11 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/30 10:13:13 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	get_fork(t_philo *p)
 	struct timeval	ct;
 
 	gettimeofday(&ct, NULL);
+	update_ttd(p);
 	if (p->pn % 2 == 0)
 		return (get_fork_even(p, ct));
 	else
