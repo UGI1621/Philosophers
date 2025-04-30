@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 12:28:29 by saan             ###   ########.fr       */
+/*   Updated: 2025/04/30 12:48:53 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,7 @@ void	*routine(void *cur)
 			break ;
 		if (!get_fork(p))
 			continue ;
-		// get_fork(p);
-		// if (*p->lr_f && *p->ll_f)
-		// 	eating(p);
+
 	}
 	return (NULL);
 }
