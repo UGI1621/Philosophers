@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:16:27 by saan              #+#    #+#             */
-/*   Updated: 2025/04/29 22:13:33 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/02 11:05:11 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 int	main(int ac, char *av[])
 {
-	t_obs	obs = {0};
+	t_obs	obs;
+	struct timeval	ct;
 
+	gettimeofday(&ct, NULL);
 	if (!is_valid_args(ac, av))
 		return (1);
 	if (init_obs(&obs, ft_atoi(av[1])))
 		return (1);
-	if (init_cdll(&obs, av))
+	if (init_cdll(&obs, av, ct))
 		return (1);
 	thread_process(&obs, ft_atoi(av[1]));
 	free_all_nodes(&obs, ft_atoi(av[1]));

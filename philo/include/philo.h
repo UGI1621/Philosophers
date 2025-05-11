@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 11:38:30 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/11 19:46:19 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	int				ttd;	// time to die
 	int				tte;	// time to eat
 	int				tts;	// time to sleep
+	int				et;
 	int				met;	// must eat time
 	int				amid;
 	pthread_mutex_t *m_printf;
@@ -68,13 +69,13 @@ int					ft_strcmp(char *str1, char *str2);
 void				*ft_calloc(size_t number, size_t size);
 
 // util2.c
-void	update_ttd(t_philo *p);
+void	update_ttd(t_philo *p, struct timeval ct);
 long	cal_ct(struct timeval st, struct timeval ct);
 void	create_all_pthread(t_obs *obs, int pn);
 
 // init.c
 int	init_obs(t_obs *obs, int pn);
-int	init_cdll(t_obs *obs, char *av[]);
+int	init_cdll(t_obs *obs, char *av[], struct timeval ct);
 
 // vali.c
 int	is_valid_args(int ac, char *av[]);
@@ -86,6 +87,12 @@ void	*obs_routine(void *obs_unit);
 
 // fork.c
 int	get_fork(t_philo *p);
+
+// eat.c
+void	eating(t_philo *p);
+
+// think.c
+void	sleeping(t_philo *p);
 
 #endif
 

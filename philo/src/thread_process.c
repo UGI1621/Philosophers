@@ -6,20 +6,41 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 12:48:53 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/11 19:45:50 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	die_from_ttd(t_obs *obs, t_philo *cur, struct timeval ct)
+{
+	int	i;
+
+	i = -1;
+	while (1)
+	{
+		if (pthread_mutex_lock(cur->m_printf) == 0)
+		{
+			printf("%ld %d died\n", cal_ct(cur->s_time, ct), cur->pn);
+			pthread_mutex_unlock(cur->m_printf);
+			break ;
+		}
+		else
+			continue ;
+	}
+	while (++i < obs->ph_n)
+	{
+		cur = cur->next;
+		cur->amid = 1;
+	}
+}
 
 void	*obs_routine(void *obs_unit)
 {
 	t_obs *obs;
 	t_philo *cur;
 	struct timeval ct;
-	int	i;
 
-	i = -1;
 	obs = (t_obs *)obs_unit;
 	cur = obs->head;
 	while(1)
@@ -27,17 +48,10 @@ void	*obs_routine(void *obs_unit)
 		gettimeofday(&ct, NULL);
 		if (cur->ttd <= 0)
 		{
-			printf("%ld %d is dead\n", cal_ct(cur->s_time,ct), cur->pn);
-			while (++i < obs->ph_n)
-			{
-				cur = cur->next;
-				printf("obs kill everyone pn : %d\n", cur->pn);
-				cur->amid = 1;
-			}
-			break ;
+			die_from_ttd(obs, cur, ct);
+			return (NULL);
 		}
 		cur = cur->next;
-		// usleep(500);
 	}
 	return (NULL);
 }
@@ -45,17 +59,23 @@ void	*obs_routine(void *obs_unit)
 void	*routine(void *cur)
 {
 	t_philo *p;
+	struct timeval ct;
 
 	p = (t_philo *)cur;
-	gettimeofday(&p->s_time, NULL);
 	while (1)
 	{
-		update_ttd(p);
+		gettimeofday(&ct, NULL);
+		update_ttd(p, ct);
 		if (p->amid)
-			break ;
+			return (NULL);
 		if (!get_fork(p))
 			continue ;
-
+		else if (get_fork(p) == -1)
+			return (NULL);
+		if (p->ll_f && p->lr_f)
+			eating(p);
+		if (p->et > 0)
+			sleeping(p);
 	}
 	return (NULL);
 }

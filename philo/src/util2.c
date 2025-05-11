@@ -6,22 +6,30 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:31:26 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 11:37:22 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/11 19:56:51 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	update_ttd(t_philo *p)
+void	update_ttd(t_philo *p, struct timeval ct)
 {
 	struct timeval now;
-	gettimeofday(&now, NULL);
+	// long	elapsed_ms;
 
-	long elapsed_ms = cal_ct(p->s_time, now); // ms
-	p->ttd = p->init_ttd - elapsed_ms;
-
-	if (p->ttd < 0)
-		p->ttd = 0;
+	while (1)
+	{
+		gettimeofday(&now, NULL);
+		if (cal_ct(ct, now) > 0)
+		{
+			p->ttd -= cal_ct(ct, now);
+			if (p->ttd <= 0)
+				p->amid = 1;
+			return ;
+		}
+	}
+	// printf("%ld \n", elapsed_ms);
+	// p->ttd = p->init_ttd - elapsed_ms;
 }
 
 long	cal_ct(struct timeval st, struct timeval ct)
@@ -37,15 +45,18 @@ long	cal_ct(struct timeval st, struct timeval ct)
 void	create_all_pthread(t_obs *obs, int pn)
 {
 	t_philo *cur;
+	struct timeval	stime;
 	int	i;
 
 	i = -1;
 	cur = obs->head;
+	gettimeofday(&stime, NULL);
+	cur->s_time = stime;
 	while (++i < pn)
 	{
-		gettimeofday(&cur->s_time, NULL);
 		pthread_create(&cur->tid, NULL, routine, cur);
 		cur = cur->next;
+		cur->s_time = stime;
 	}
 	pthread_create(&obs->tid, NULL, obs_routine, obs);
 }

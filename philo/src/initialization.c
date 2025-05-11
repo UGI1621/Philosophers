@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 11:38:40 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/02 11:06:09 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	init_obs(t_obs *obs, int pn)
 	return (0);
 }
 
-static t_philo	*make_philo_node(t_obs *obs, int i, char *av[])
+static t_philo	*make_philo_node(t_obs *obs, int i, char *av[], struct timeval ct)
 {
 	t_philo *cur;
 
@@ -47,6 +47,7 @@ static t_philo	*make_philo_node(t_obs *obs, int i, char *av[])
 	if (!cur)
 		return (NULL);
 	cur->tid = 0;
+	cur->s_time = ct;
 	cur->m_printf = &obs->m_printf;
 	cur->amid = 0;
 	cur->pn = i + 1;
@@ -58,12 +59,13 @@ static t_philo	*make_philo_node(t_obs *obs, int i, char *av[])
 	cur->r_f = &obs->forks[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
 	cur->ll_f = &obs->is_lock[i];
 	cur->lr_f = &obs->is_lock[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
+	cur->et = 0;
 	if (av[5])
 		cur->met = ft_atoi(av[5]);
 	return (cur);
 }
 
-int	init_cdll(t_obs *obs, char *av[])
+int	init_cdll(t_obs *obs, char *av[], struct timeval ct)
 {
 	t_philo	*node;
 	int	i;
@@ -71,7 +73,7 @@ int	init_cdll(t_obs *obs, char *av[])
 	i = -1;
 	while (++i < ft_atoi(av[1]))
 	{
-		node = make_philo_node(obs, i, av);
+		node = make_philo_node(obs, i, av, ct);
 		if (!node)
 			return (e_w_f("fmpn", obs, i));
 		if (!obs->head)

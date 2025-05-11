@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 20:55:57 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 12:37:21 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/11 20:05:55 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@ static int	print_got_fork(t_philo *p)
 {
 	struct timeval ct;
 
-	gettimeofday(&ct, NULL);
 	while (1)
 	{
+		gettimeofday(&ct, NULL);
 		if (pthread_mutex_lock(p->m_printf) == 0)
 		{
-			printf("%ld %d has taken a right fork\n", cal_ct(p->s_time, ct), p->pn);
-			printf("%ld %d has taken a left fork\n", cal_ct(p->s_time, ct), p->pn);
+			printf("%ld %d has taken a fork\n", cal_ct(p->s_time, ct), p->pn);
+			// printf("%ld %d has taken a fork %d\n", cal_ct(p->s_time, ct), p->pn, p->ttd);
 			pthread_mutex_unlock(p->m_printf);
 			return (1);
 		}
@@ -48,7 +48,7 @@ static int	get_fork_odd(t_philo *p)
 				// printf("%ld %d has lost a right fork\n", cal_ct(p->s_time, ct), p->pn);
 				pthread_mutex_unlock(p->r_f);
 				*p->lr_f = 0;
-				usleep(100);
+				// usleep(100);
 			}
 		}
 	}
@@ -72,7 +72,7 @@ static int	get_fork_even(t_philo *p)
 				// printf("%ld %d has lost a left fork\n", cal_ct(p->s_time, ct), p->pn);
 				pthread_mutex_unlock(p->l_f);
 				*p->ll_f = 0;
-				usleep(100);
+				// usleep(100);
 			}
 		}
 	}
@@ -81,6 +81,12 @@ static int	get_fork_even(t_philo *p)
 
 int	get_fork(t_philo *p)
 {
+	struct timeval	gt;
+
+	gettimeofday(&gt, NULL);
+	update_ttd(p, gt);
+	if (p->amid)
+		return (-1);
 	if (p->pn % 2 == 0)
 		return (get_fork_even(p));
 	else
