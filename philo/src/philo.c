@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:16:27 by saan              #+#    #+#             */
-/*   Updated: 2025/05/02 11:05:11 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/12 19:15:43 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int ac, char *av[])
 	gettimeofday(&ct, NULL);
 	if (!is_valid_args(ac, av))
 		return (1);
-	if (init_obs(&obs, ft_atoi(av[1])))
+	if (init_obs(&obs, ft_atoi(av[1]), ac, av))
 		return (1);
 	if (init_cdll(&obs, av, ct))
 		return (1);

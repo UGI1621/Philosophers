@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/05/11 19:45:50 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/12 19:36:13 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,28 @@ void	die_from_ttd(t_obs *obs, t_philo *cur, struct timeval ct)
 	}
 }
 
+int	count_et(t_obs *obs, t_philo *p)
+{
+	int i;
+
+	i = -1;
+	if (p->et > 0)
+	{
+		obs->pet += p->et;
+		if (obs->pet == obs->ph_n * obs->init_met)
+		{
+			while (++i < obs->ph_n)
+			{
+				p->amid = 1;
+				p = p->next;
+			}
+			return (1);
+		}
+		p->et = 0;
+	}
+	return (0);
+}
+
 void	*obs_routine(void *obs_unit)
 {
 	t_obs *obs;
@@ -51,6 +73,8 @@ void	*obs_routine(void *obs_unit)
 			die_from_ttd(obs, cur, ct);
 			return (NULL);
 		}
+		if (count_et(obs, cur))
+			return (NULL);
 		cur = cur->next;
 	}
 	return (NULL);
@@ -68,14 +92,15 @@ void	*routine(void *cur)
 		update_ttd(p, ct);
 		if (p->amid)
 			return (NULL);
-		if (!get_fork(p))
-			continue ;
-		else if (get_fork(p) == -1)
+		if (thinking(p) == -1)
 			return (NULL);
-		if (p->ll_f && p->lr_f)
-			eating(p);
-		if (p->et > 0)
-			sleeping(p);
+		else
+		{
+			if (p->ll_f && p->lr_f)
+				eating(p);
+			if (p->et > 0)
+				sleeping(p);
+		}
 	}
 	return (NULL);
 }

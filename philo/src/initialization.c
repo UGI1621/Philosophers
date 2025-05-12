@@ -6,25 +6,25 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/05/02 11:06:09 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/12 19:32:12 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_obs(t_obs *obs, int pn)
+int	init_obs(t_obs *obs, int pn, int ac, char *av[])
 {
 	int i;
 
 	obs->head = NULL;
 	obs->tid = 0;
 	obs->ph_n = pn;
-	obs->is_dead = 0;
-	obs->is_met = -1;
+	obs->init_met = -1;
+	if (ac == 6)
+		obs->init_met = ft_atoi(av[5]);
+	obs->pet = 0;
 	obs->tail = NULL;
 	obs->is_lock = (int *)ft_calloc(pn, sizeof(int));
-	if (!obs->is_lock)
-		return (1);
 	obs->forks = (pthread_mutex_t *)ft_calloc(pn, sizeof(pthread_mutex_t));
 	i = -1;
 	while (++i < pn)
@@ -55,6 +55,7 @@ static t_philo	*make_philo_node(t_obs *obs, int i, char *av[], struct timeval ct
 	cur->init_ttd = cur->ttd;
 	cur->tte = ft_atoi(av[3]);
 	cur->tts = ft_atoi(av[4]);
+	cur->e_flag = 0;
 	cur->l_f = &obs->forks[i];
 	cur->r_f = &obs->forks[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
 	cur->ll_f = &obs->is_lock[i];

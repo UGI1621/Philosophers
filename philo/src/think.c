@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 09:33:44 by saan              #+#    #+#             */
-/*   Updated: 2025/05/11 20:01:03 by saan             ###   ########.fr       */
+/*   Created: 2025/05/12 18:33:46 by saan              #+#    #+#             */
+/*   Updated: 2025/05/12 19:32:51 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	print_sleeping(t_philo *p)
+static void	print_thinking(t_philo *p)
 {
 	struct timeval	ct;
 
@@ -21,7 +21,7 @@ static void	print_sleeping(t_philo *p)
 	{
 		if (pthread_mutex_lock(p->m_printf) == 0)
 		{
-			printf("%ld %d is sleeping\n", cal_ct(p->s_time, ct), p->pn);
+			printf("%ld %d is thinking\n", cal_ct(p->s_time, ct), p->pn);
 			pthread_mutex_unlock(p->m_printf);
 			break ;
 		}
@@ -30,24 +30,25 @@ static void	print_sleeping(t_philo *p)
 	}
 }
 
-void	sleeping(t_philo *p)
+int	thinking(t_philo *p)
 {
-	struct timeval	st;
-	struct timeval	sst;
+	struct timeval	slt;
+	struct timeval	sslt;
 
-	pthread_mutex_unlock(p->r_f);
-	*p->lr_f = 0;
-	pthread_mutex_unlock(p->l_f);
-	*p->ll_f = 0;
-	gettimeofday(&sst, NULL);
-	print_sleeping(p);
-	while(1)
+	gettimeofday(&sslt, NULL);
+	if (p->e_flag > 0)
+		print_thinking(p);
+	while (1)
 	{
-		gettimeofday(&st, NULL);
-		update_ttd(p, st);
+		gettimeofday(&slt, NULL);
+		update_ttd(p, slt);
 		if (p->amid)
-			return ;
-		if (cal_ct(sst, st) >= p->tts)
-			return ;
+			return (-1);
+		if (!get_fork(p))
+			continue ;
+		else if (get_fork(p) == -1)
+			return (-1);
+		else
+			return (0);
 	}
 }

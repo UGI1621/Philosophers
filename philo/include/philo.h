@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/05/11 19:46:19 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/12 19:31:55 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_philo
 	int				tte;	// time to eat
 	int				tts;	// time to sleep
 	int				et;
+	int				e_flag;
 	int				met;	// must eat time
 	int				amid;
 	pthread_mutex_t *m_printf;
@@ -47,8 +48,8 @@ typedef struct s_obs
 	pthread_t		tid;
 	pthread_mutex_t	m_printf;
 	int				ph_n;
-	int				is_dead;	// anyone dead?
-	int				is_met;		// every one finish?
+	int				init_met;		// every one finish?
+	int				pet;
 	t_philo			*tail;
 	int				*is_lock;
 	pthread_mutex_t	*forks;
@@ -74,7 +75,7 @@ long	cal_ct(struct timeval st, struct timeval ct);
 void	create_all_pthread(t_obs *obs, int pn);
 
 // init.c
-int	init_obs(t_obs *obs, int pn);
+int	init_obs(t_obs *obs, int pn, int ac, char *av[]);
 int	init_cdll(t_obs *obs, char *av[], struct timeval ct);
 
 // vali.c
@@ -91,8 +92,11 @@ int	get_fork(t_philo *p);
 // eat.c
 void	eating(t_philo *p);
 
-// think.c
+// sleep.c
 void	sleeping(t_philo *p);
+
+// think.c
+int		thinking(t_philo *p);
 
 #endif
 
