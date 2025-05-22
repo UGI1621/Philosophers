@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   think.c                                            :+:      :+:    :+:   */
+/*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 09:33:44 by saan              #+#    #+#             */
-/*   Updated: 2025/05/11 20:01:03 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/17 17:42:18 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	sleeping(t_philo *p)
 	struct timeval	sst;
 
 	pthread_mutex_unlock(p->r_f);
-	*p->lr_f = 0;
+	p->lr_f = 0;
 	pthread_mutex_unlock(p->l_f);
-	*p->ll_f = 0;
+	p->ll_f = 0;
 	gettimeofday(&sst, NULL);
 	print_sleeping(p);
 	while(1)

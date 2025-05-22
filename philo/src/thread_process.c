@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/05/12 19:36:13 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/17 18:29:36 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,28 @@ void	die_from_ttd(t_obs *obs, t_philo *cur, struct timeval ct)
 
 int	count_et(t_obs *obs, t_philo *p)
 {
-	int i;
+	int	i;
+	int	done;
+	t_philo *cur;
 
 	i = -1;
-	if (p->et > 0)
+	done = 1;
+	cur = obs->head;
+	while (++i < obs->ph_n)
 	{
-		obs->pet += p->et;
-		if (obs->pet == obs->ph_n * obs->init_met)
+		if (!(cur->et >= cur->met))
+			done = 0;
+		cur = cur->next;
+	}
+	if (done)
+	{
+		i = -1;
+		while (++i < obs->ph_n)
 		{
-			while (++i < obs->ph_n)
-			{
-				p->amid = 1;
-				p = p->next;
-			}
-			return (1);
+			cur->amid = 1;
+			cur = cur->next;
 		}
-		p->et = 0;
+		return (1);
 	}
 	return (0);
 }

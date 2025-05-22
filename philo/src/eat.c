@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:25:35 by saan              #+#    #+#             */
-/*   Updated: 2025/05/12 19:32:29 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/17 18:30:10 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,17 @@ void	eating(t_philo *p)
 			return ;
 		if (cal_ct(set, et) >= p->tte)
 		{
-			// if (pthread_mutex_lock(p->m_printf) == 0)
-			// {
-			// 	printf("%ld %d is put down forks\n", cal_ct(p->s_time, et), p->pn);
-			// 	pthread_mutex_unlock(p->m_printf);
-			// }
-			p->et++;
-			p->e_flag = 1;
-			return ;
+			while (1)
+			{
+				if (pthread_mutex_lock(p->m_et) == 0)
+				{
+					p->et++;
+					pthread_mutex_unlock(p->m_et);
+					break ;
+				}
+				else
+					continue ;
+			}
 		}
 	}
 }

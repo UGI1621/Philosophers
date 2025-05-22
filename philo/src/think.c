@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 18:33:46 by saan              #+#    #+#             */
-/*   Updated: 2025/05/12 19:32:51 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/17 18:28:58 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	thinking(t_philo *p)
 	struct timeval	sslt;
 
 	gettimeofday(&sslt, NULL);
-	if (p->e_flag > 0)
+	if (p->et > 0)
 		print_thinking(p);
 	while (1)
 	{

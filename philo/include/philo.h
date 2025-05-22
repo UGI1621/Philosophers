@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/05/12 19:31:55 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/17 18:29:11 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,16 @@ typedef struct s_philo
 	pthread_t		tid;
 	int				pn;		// philo num
 	pthread_mutex_t				*l_f;	// left fork
-	int							*ll_f;
+	int							ll_f;
 	pthread_mutex_t				*r_f;	// right fork
-	int							*lr_f;
+	int							lr_f;
 	int				init_ttd;
 	int				ttd;	// time to die
 	int				tte;	// time to eat
 	int				tts;	// time to sleep
+	pthread_mutex_t	*m_et;
 	int				et;
-	int				e_flag;
+	// int				e_flag;
 	int				met;	// must eat time
 	int				amid;
 	pthread_mutex_t *m_printf;
@@ -48,8 +49,9 @@ typedef struct s_obs
 	pthread_t		tid;
 	pthread_mutex_t	m_printf;
 	int				ph_n;
-	int				init_met;		// every one finish?
-	int				pet;
+	// int				init_met;		// every one finish?
+	// int				pet;
+	pthread_mutex_t	m_et;
 	t_philo			*tail;
 	int				*is_lock;
 	pthread_mutex_t	*forks;
@@ -99,4 +101,3 @@ void	sleeping(t_philo *p);
 int		thinking(t_philo *p);
 
 #endif
-
