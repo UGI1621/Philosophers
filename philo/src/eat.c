@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:25:35 by saan              #+#    #+#             */
-/*   Updated: 2025/05/17 18:30:10 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/22 15:14:13 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	eating(t_philo *p)
 				{
 					p->et++;
 					pthread_mutex_unlock(p->m_et);
-					break ;
+					return ;
 				}
 				else
 					continue ;

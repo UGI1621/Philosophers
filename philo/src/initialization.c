@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/05/17 18:29:50 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/22 16:17:00 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ static t_philo	*make_philo_node(t_obs *obs, int i, char *av[], struct timeval ct
 	cur->et = 0;
 	if (av[5])
 		cur->met = ft_atoi(av[5]);
+	else
+		cur->met = -1;
 	return (cur);
 }
 
