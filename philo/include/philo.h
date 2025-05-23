@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/05/17 18:29:11 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/23 18:27:50 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ typedef struct s_philo
 	int				tts;	// time to sleep
 	pthread_mutex_t	*m_et;
 	int				et;
+	int				met;
 	// int				e_flag;
-	int				met;	// must eat time
 	int				amid;
 	pthread_mutex_t *m_printf;
+	int				*ml_pinrtf;
 	struct timeval	s_time;
 	struct s_philo	*next;
 }					t_philo;
@@ -48,9 +49,11 @@ typedef struct s_obs
 	t_philo			*head;
 	pthread_t		tid;
 	pthread_mutex_t	m_printf;
+	int				ml_printf;
 	int				ph_n;
 	// int				init_met;		// every one finish?
 	// int				pet;
+	int				met;
 	pthread_mutex_t	m_et;
 	t_philo			*tail;
 	int				*is_lock;
@@ -99,5 +102,6 @@ void	sleeping(t_philo *p);
 
 // think.c
 int		thinking(t_philo *p);
+void	print_thinking(t_philo *p);
 
 #endif

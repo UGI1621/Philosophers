@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eat.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:25:35 by saan              #+#    #+#             */
-/*   Updated: 2025/05/22 15:14:13 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/23 19:44:02 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ static void	print_eating(t_philo *p)
 	while (1)
 	{
 		gettimeofday(&ct, NULL);
+		update_ttd(p, ct);
+		if (p->amid)
+			break ;
+		if (*p->ml_pinrtf)
+			continue ;
 		if (pthread_mutex_lock(p->m_printf) == 0)
 		{
 			printf("%ld %d is eating\n", cal_ct(p->s_time, ct), p->pn);
@@ -26,7 +31,7 @@ static void	print_eating(t_philo *p)
 			break ;
 		}
 		else
-		continue ;
+			continue ;
 	}
 	p->ttd = p->init_ttd;
 }

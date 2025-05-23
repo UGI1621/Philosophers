@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   thread_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/05/17 18:29:36 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/23 19:46:30 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	die_from_ttd(t_obs *obs, t_philo *cur, struct timeval ct)
+void	die_from_ttd(t_obs *obs, t_philo *cur)
 {
 	int	i;
-
+	struct timeval	ct;
 	i = -1;
 	while (1)
 	{
+		gettimeofday(&ct, NULL);
 		if (pthread_mutex_lock(cur->m_printf) == 0)
 		{
 			printf("%ld %d died\n", cal_ct(cur->s_time, ct), cur->pn);
+			obs->ml_printf = 1;
 			pthread_mutex_unlock(cur->m_printf);
 			break ;
 		}
@@ -46,7 +48,7 @@ int	count_et(t_obs *obs, t_philo *p)
 	cur = obs->head;
 	while (++i < obs->ph_n)
 	{
-		if (!(cur->et >= cur->met))
+		if (!(cur->et >= obs->met))
 			done = 0;
 		cur = cur->next;
 	}
@@ -67,20 +69,18 @@ void	*obs_routine(void *obs_unit)
 {
 	t_obs *obs;
 	t_philo *cur;
-	struct timeval ct;
 
 	obs = (t_obs *)obs_unit;
 	cur = obs->head;
 	while(1)
 	{
-		gettimeofday(&ct, NULL);
-		if (cur->ttd <= 0)
+		if (cur->amid)
 		{
-			die_from_ttd(obs, cur, ct);
+			die_from_ttd(obs, cur);
 			return (NULL);
 		}
-		if (count_et(obs, cur))
-			return (NULL);
+		if (obs->met != -1 && count_et(obs, cur))
+		return (NULL);
 		cur = cur->next;
 	}
 	return (NULL);
@@ -100,13 +100,8 @@ void	*routine(void *cur)
 			return (NULL);
 		if (thinking(p) == -1)
 			return (NULL);
-		else
-		{
-			if (p->ll_f && p->lr_f)
-				eating(p);
-			if (p->et > 0)
-				sleeping(p);
-		}
+		eating(p);
+		sleeping(p);
 	}
 	return (NULL);
 }

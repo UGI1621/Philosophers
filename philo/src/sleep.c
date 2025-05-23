@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sleep.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 09:33:44 by saan              #+#    #+#             */
-/*   Updated: 2025/05/17 17:42:18 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/23 19:44:11 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,14 @@ static void	print_sleeping(t_philo *p)
 {
 	struct timeval	ct;
 
-	gettimeofday(&ct, NULL);
 	while (1)
 	{
+		gettimeofday(&ct, NULL);
+		update_ttd(p, ct);
+		if (p->amid)
+			break ;
+		if (*p->ml_pinrtf)
+			continue ;
 		if (pthread_mutex_lock(p->m_printf) == 0)
 		{
 			printf("%ld %d is sleeping\n", cal_ct(p->s_time, ct), p->pn);
