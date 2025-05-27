@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:14:52 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 18:27:50 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 14:56:36 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_philo
 	int				met;
 	// int				e_flag;
 	int				amid;
+	pthread_mutex_t *m_amid;
 	pthread_mutex_t *m_printf;
 	int				*ml_pinrtf;
 	struct timeval	s_time;
@@ -55,6 +56,7 @@ typedef struct s_obs
 	// int				pet;
 	int				met;
 	pthread_mutex_t	m_et;
+	pthread_mutex_t m_amid;
 	t_philo			*tail;
 	int				*is_lock;
 	pthread_mutex_t	*forks;
@@ -75,6 +77,7 @@ int					ft_strcmp(char *str1, char *str2);
 void				*ft_calloc(size_t number, size_t size);
 
 // util2.c
+void	set_die(t_philo *p);
 void	update_ttd(t_philo *p, struct timeval ct);
 long	cal_ct(struct timeval st, struct timeval ct);
 void	create_all_pthread(t_obs *obs, int pn);
@@ -103,5 +106,9 @@ void	sleeping(t_philo *p);
 // think.c
 int		thinking(t_philo *p);
 void	print_thinking(t_philo *p);
+
+// status_check.c
+int	obs_die_check(t_obs *obs);
+int	die_check(t_philo *p);
 
 #endif

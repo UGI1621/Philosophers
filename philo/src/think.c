@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 18:33:46 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 19:43:53 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 14:57:08 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	print_thinking(t_philo *p)
 	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if (p->amid)
+		if (die_check(p))
 			break ;
 		if (*p->ml_pinrtf)
 			continue ;
@@ -47,7 +47,7 @@ int	thinking(t_philo *p)
 	{
 		gettimeofday(&slt, NULL);
 		update_ttd(p, slt);
-		if (p->amid)
+		if (die_check(p))
 			return (-1);
 		if (!get_fork(p))
 			continue ;

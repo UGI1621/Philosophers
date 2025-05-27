@@ -6,11 +6,26 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:31:26 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 18:05:30 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 14:40:16 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	set_die(t_philo *p)
+{
+	while(1)
+	{
+		if (pthread_mutex_lock(p->m_amid) == 0)
+		{
+			p->amid = 1;
+			pthread_mutex_unlock(p->m_amid);
+			return ;
+		}
+		else
+			continue;
+	}
+}
 
 void	update_ttd(t_philo *p, struct timeval ct)
 {
@@ -24,7 +39,7 @@ void	update_ttd(t_philo *p, struct timeval ct)
 		{
 			p->ttd -= cal_ct(ct, now);
 			if (p->ttd <= 0)
-				p->amid = 1;
+				set_die(p);
 			return ;
 		}
 	}

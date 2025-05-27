@@ -20,7 +20,7 @@ static int	print_got_fork(t_philo *p)
 	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if (p->amid)
+		if (die_check(p))
 			break ;
 		if (*p->ml_pinrtf)
 			continue ;
@@ -34,54 +34,6 @@ static int	print_got_fork(t_philo *p)
 			continue ;
 	}
 }
-
-// static int	get_fork_odd(t_philo *p)
-// {
-// 	if (!p->lr_f)
-// 	{
-// 		if (pthread_mutex_lock(p->r_f) == 0)
-// 		{
-// 			p->lr_f = 1;
-// 			if (!p->ll_f && pthread_mutex_lock(p->l_f) == 0)
-// 			{
-// 				p->ll_f = 1;
-// 				return (print_got_fork(p));
-// 			}
-// 			else
-// 			{
-// 				// printf("%ld %d has lost a right fork\n", cal_ct(p->s_time, ct), p->pn);
-// 				pthread_mutex_unlock(p->r_f);
-// 				p->lr_f = 0;
-// 				// usleep(100);
-// 			}
-// 		}
-// 	}
-// 	return (0);
-// }
-
-// static int	get_fork_even(t_philo *p)
-// {
-// 	if (!p->ll_f)
-// 	{
-// 		if (pthread_mutex_lock(p->l_f) == 0)
-// 		{
-// 			p->ll_f = 1;
-// 			if (!p->lr_f &&pthread_mutex_lock(p->r_f) == 0)
-// 			{
-// 				p->lr_f = 1;
-// 				return (print_got_fork(p));
-// 			}
-// 			else
-// 			{
-// 				// printf("%ld %d has lost a left fork\n", cal_ct(p->s_time, ct), p->pn);
-// 				pthread_mutex_unlock(p->l_f);
-// 				p->ll_f = 0;
-// 				// usleep(100);
-// 			}
-// 		}
-// 	}
-// 	return (0);
-// }
 
 static int	get_fork_odd(t_philo *p)
 {
@@ -130,27 +82,6 @@ static int	get_fork_even(t_philo *p)
 	return (0);
 }
 
-// static int	get_fork_new(t_philo *p)
-// {
-// 	if (!p->lr_f)
-// 	{
-// 		if (pthread_mutex_lock(p->r_f) == 0)
-// 			p->lr_f = 1;
-// 		else
-// 			return (0);
-// 	}
-// 	if (!p->ll_f)
-// 	{
-// 		if (pthread_mutex_lock(p->l_f) == 0)
-// 			p->ll_f = 1;
-// 		else
-// 			return (0);
-// 	}
-// 	if (p->lr_f && p->ll_f)
-// 		return (print_got_fork(p));
-// 	return (0);
-// }
-
 int	get_fork(t_philo *p)
 {
 	struct timeval	gt;
@@ -159,11 +90,10 @@ int	get_fork(t_philo *p)
 		return (1);
 	gettimeofday(&gt, NULL);
 	update_ttd(p, gt);
-	if (p->amid)
+	if (die_check(p))
 		return (-1);
 	if (p->pn % 2 == 0)
 		return (get_fork_even(p));
 	else
 		return (get_fork_odd(p));
-	// return (get_fork_new(p));
 }

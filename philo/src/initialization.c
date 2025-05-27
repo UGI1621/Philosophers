@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 18:28:13 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 17:19:45 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,8 @@ int	init_obs(t_obs *obs, int pn, int ac, char *av[])
 	obs->is_lock = (int *)ft_calloc(pn, sizeof(int));
 	obs->forks = (pthread_mutex_t *)ft_calloc(pn, sizeof(pthread_mutex_t));
 	pthread_mutex_init(&obs->m_printf, NULL);
-	i = -1;
-	while (++i < pn)
-	{
-		if (pthread_mutex_init(&obs->forks[i], NULL) != 0)
-		{
-			perror("fail init mutex");
-			destroy_all_mutex(obs->forks, i - 1);
-			return (1);
-		}
-	}
+	pthread_mutex_init(&obs->m_amid, NULL);
+
 	return (0);
 }
 
@@ -51,6 +43,7 @@ static t_philo	*make_philo_node(t_obs *obs, int i, char *av[], struct timeval ct
 	cur->m_printf = &obs->m_printf;
 	cur->ml_pinrtf = &obs->ml_printf;
 	cur->amid = 0;
+	cur->m_amid = &obs->m_amid;
 	cur->pn = i + 1;
 	cur->ttd = ft_atoi(av[2]);
 	cur->init_ttd = cur->ttd;

@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:25:35 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 19:44:02 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 14:57:38 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	print_eating(t_philo *p)
 	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if (p->amid)
+		if (die_check(p))
 			break ;
 		if (*p->ml_pinrtf)
 			continue ;
@@ -47,7 +47,7 @@ void	eating(t_philo *p)
 	{
 		gettimeofday(&et, NULL);
 		update_ttd(p, et);
-		if (p->amid)
+		if (die_check(p))
 			return ;
 		if (cal_ct(set, et) >= p->tte)
 		{

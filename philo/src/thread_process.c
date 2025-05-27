@@ -6,63 +6,36 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 19:46:30 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 15:03:57 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	die_from_ttd(t_obs *obs, t_philo *cur)
-{
-	int	i;
-	struct timeval	ct;
-	i = -1;
-	while (1)
-	{
-		gettimeofday(&ct, NULL);
-		if (pthread_mutex_lock(cur->m_printf) == 0)
-		{
-			printf("%ld %d died\n", cal_ct(cur->s_time, ct), cur->pn);
-			obs->ml_printf = 1;
-			pthread_mutex_unlock(cur->m_printf);
-			break ;
-		}
-		else
-			continue ;
-	}
-	while (++i < obs->ph_n)
-	{
-		cur = cur->next;
-		cur->amid = 1;
-	}
-}
-
 int	count_et(t_obs *obs, t_philo *p)
 {
 	int	i;
-	int	done;
 	t_philo *cur;
 
 	i = -1;
-	done = 1;
 	cur = obs->head;
+	obs->ml_printf = 1;
 	while (++i < obs->ph_n)
 	{
 		if (!(cur->et >= obs->met))
-			done = 0;
+		{
+			obs->ml_printf = 0;
+			return (0);
+		}
 		cur = cur->next;
 	}
-	if (done)
+	i = -1;
+	while (++i < obs->ph_n)
 	{
-		i = -1;
-		while (++i < obs->ph_n)
-		{
-			cur->amid = 1;
-			cur = cur->next;
-		}
-		return (1);
+		set_die(cur);
+		cur = cur->next;
 	}
-	return (0);
+	return (1);
 }
 
 void	*obs_routine(void *obs_unit)
@@ -74,13 +47,10 @@ void	*obs_routine(void *obs_unit)
 	cur = obs->head;
 	while(1)
 	{
-		if (cur->amid)
-		{
-			die_from_ttd(obs, cur);
+		if(obs_die_check(obs))
 			return (NULL);
-		}
 		if (obs->met != -1 && count_et(obs, cur))
-		return (NULL);
+			return (NULL);
 		cur = cur->next;
 	}
 	return (NULL);
@@ -96,12 +66,12 @@ void	*routine(void *cur)
 	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if (p->amid)
+		if (die_check(p))
 			return (NULL);
 		if (thinking(p) == -1)
 			return (NULL);
-		eating(p);
-		sleeping(p);
+		// eating(p);
+		// sleeping(p);
 	}
 	return (NULL);
 }

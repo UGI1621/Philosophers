@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 09:33:44 by saan              #+#    #+#             */
-/*   Updated: 2025/05/23 19:44:11 by saan             ###   ########.fr       */
+/*   Updated: 2025/05/24 14:58:00 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	print_sleeping(t_philo *p)
 	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if (p->amid)
+		if (die_check(p))
 			break ;
 		if (*p->ml_pinrtf)
 			continue ;
@@ -50,7 +50,7 @@ void	sleeping(t_philo *p)
 	{
 		gettimeofday(&st, NULL);
 		update_ttd(p, st);
-		if (p->amid)
+		if (die_check(p))
 			return ;
 		if (cal_ct(sst, st) >= p->tts)
 			return ;
