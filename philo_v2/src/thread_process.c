@@ -6,62 +6,57 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/05/27 19:18:14 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:04:30 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	print_hello(t_philo *p)
+int	check_ready(t_ready *ready)
 {
-	struct timeval ct;
-
-	while (1)
+	pthread_mutex_lock(&ready->box);
+	if (ready->ready)
 	{
-		gettimeofday(&ct, NULL);
-		update_ttd(p, ct);
-		if (check_died(p))
-			return ;
-		pthread_mutex_lock(p->m_print);
-		if (*p->l_print)
-		{
-			pthread_mutex_unlock(p->m_print);
-			continue ;
-		}
-		printf("%d right fork status %d\n",p->pn, p->rb->status);
-		pthread_mutex_unlock(p->m_print);
-		return ;
+		pthread_mutex_unlock(&ready->box);
+		return (1);
 	}
+	pthread_mutex_unlock(&ready->box);
+	return (0);
 }
 
 void	*obs_routine(void *obs_unit)
 {
-	t_obs *obs;
+	t_obs	*obs;
 
 	obs = (t_obs *)obs_unit;
-	while(1)
+	while (1)
 	{
-		if (find_dead_p(obs))
+		if (check_ready(&obs->ready))
+			break ;
+	}
+	while (1)
+	{
+		if (check_end(obs))
 			return (NULL);
-		if ((obs->met != -1) && cal_et(obs))
-		{
-			write(1, "FUCK\n", 5);
-			return (NULL);
-		}
 	}
 }
 
 void	*routine(void *cur)
 {
-	t_philo *p;
-	struct timeval ct;
+	t_philo			*p;
+	struct timeval	ct;
 
 	p = (t_philo *)cur;
+	while (1)
+	{
+		if (check_ready(p->ready))
+			break ;
+	}
 	while (!check_died(p))
 	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if(!get_fork(p))
+		if (!get_fork(p))
 			return (NULL);
 		if (p->rh && p->lh)
 		{

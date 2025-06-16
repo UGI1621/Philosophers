@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:49:53 by saan              #+#    #+#             */
-/*   Updated: 2025/05/24 15:21:13 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:03:41 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static int	ft_isdigit(char c)
 int	ft_atoi(const char *nptr)
 {
 	long long	res;
-	int		sign_cnt;
-	int		ismin;
+	int			sign_cnt;
+	int			ismin;
 
 	res = 0;
 	sign_cnt = 0;

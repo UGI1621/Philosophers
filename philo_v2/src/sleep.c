@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 18:41:32 by saan              #+#    #+#             */
-/*   Updated: 2025/05/27 18:43:01 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:04:49 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	sleeping(t_philo *p)
 
 	gettimeofday(&sst, NULL);
 	print_sleeping(p);
-	while(1)
+	while (1)
 	{
 		gettimeofday(&st, NULL);
 		update_ttd(p, st);

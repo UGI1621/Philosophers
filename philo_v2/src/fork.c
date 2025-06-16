@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 23:12:01 by saan              #+#    #+#             */
-/*   Updated: 2025/05/27 17:54:58 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:03:25 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	try_get_fork(t_philo *p)
 
 int	get_fork(t_philo *p)
 {
-	struct timeval ct;
+	struct timeval	ct;
 
 	while (!(p->rh && p->lh))
 	{

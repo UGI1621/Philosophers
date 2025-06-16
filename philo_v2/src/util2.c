@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 18:31:26 by saan              #+#    #+#             */
-/*   Updated: 2025/05/27 19:20:16 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:04:39 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	update_ttd(t_philo *p, struct timeval ct)
 {
-	struct timeval now;
+	struct timeval	now;
 
 	while (1)
 	{
@@ -44,9 +44,9 @@ long	cal_ct(struct timeval st, struct timeval ct)
 
 void	create_all_pthread(t_obs *obs, int pn)
 {
-	t_philo *cur;
+	t_philo			*cur;
 	struct timeval	stime;
-	int	i;
+	int				i;
 
 	i = -1;
 	cur = obs->head;
@@ -59,33 +59,51 @@ void	create_all_pthread(t_obs *obs, int pn)
 		cur = cur->next;
 		cur->s_time = stime;
 	}
+	pthread_mutex_lock(&obs->ready.box);
+	obs->ready.ready = 1;
+	pthread_mutex_unlock(&obs->ready.box);
 }
 
-int		cal_et(t_obs *obs)
+static void	cal_et(t_obs *obs, t_philo *p, int *flag, int *done)
 {
 	int	i;
-	int	all_et;
-	int	flag;
-	t_philo *p;
 
 	i = -1;
-	p = obs->head;
-	flag = 0;
-	all_et = 0;
-	pthread_mutex_lock(&obs->m_stat);
 	while (++i < obs->ph_n)
 	{
-		if (p->status.et > obs->met)
-			all_et += obs->met;
-		else
-			all_et += p->status.et;
-		if (all_et >= (obs->met * obs->ph_n))
+		if (obs_check_died(p))
 		{
-			flag = 1;
-			break ;
+			set_all_died(obs);
+			*flag = 1;
+		}
+		if (obs->met != -1)
+		{
+			if (p->status.et >= obs->met)
+				(*done)++;
+			if (*done == obs->ph_n)
+			{
+				pthread_mutex_lock(&obs->m_print);
+				obs->l_print = 1;
+				set_all_died(obs);
+				pthread_mutex_unlock(&obs->m_print);
+				*flag = 1;
+			}
 		}
 		p = p->next;
 	}
+}
+
+int	check_end(t_obs *obs)
+{
+	int		done;
+	int		flag;
+	t_philo	*p;
+
+	p = obs->head;
+	flag = 0;
+	done = 0;
+	pthread_mutex_lock(&obs->m_stat);
+	cal_et(obs, p, &flag, &done);
 	pthread_mutex_unlock(&obs->m_stat);
 	return (flag);
 }
