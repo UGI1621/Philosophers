@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:34:55 by saan              #+#    #+#             */
-/*   Updated: 2025/06/16 19:04:09 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:20:15 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	destroy_all_mutex(t_obs *obs)
 	i = -1;
 	while (++i < obs->ph_n)
 		pthread_mutex_destroy(&obs->forks[i].box);
+	free(obs->forks);
 	pthread_mutex_destroy(&obs->m_print);
 	pthread_mutex_destroy(&obs->m_stat);
 }

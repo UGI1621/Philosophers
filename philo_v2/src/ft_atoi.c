@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:49:53 by saan              #+#    #+#             */
-/*   Updated: 2025/06/16 19:03:41 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:22:29 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_atoi(const char *nptr)
 	while (ft_sign_check(*nptr, &sign_cnt, &ismin))
 		nptr++;
 	if (sign_cnt >= 2)
-		return (0);
+		return (-1);
 	while (ft_isdigit(*nptr))
 	{
 		res = (10 * res) + (*nptr - '0');

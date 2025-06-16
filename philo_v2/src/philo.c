@@ -6,7 +6,7 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/24 15:14:36 by saan              #+#    #+#             */
-/*   Updated: 2025/06/16 19:04:00 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:31:29 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,5 @@ int	main(int ac, char *av[])
 	thread_process(&obs, ft_atoi(av[1]));
 	free_all_nodes(&obs, ft_atoi(av[1]));
 	destroy_all_mutex(&obs);
+	return (0);
 }
