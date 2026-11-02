@@ -5,63 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 09:25:35 by saan              #+#    #+#             */
-/*   Updated: 2025/05/24 14:57:38 by saan             ###   ########.fr       */
+/*   Created: 2025/05/27 16:21:50 by saan              #+#    #+#             */
+/*   Updated: 2025/05/30 15:17:19 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	print_eating(t_philo *p)
+static	int	put_down_lfork(t_philo *p)
 {
-	struct timeval	ct;
-
-	while (1)
+	pthread_mutex_lock(&p->lb->box);
+	if (check_died(p))
 	{
-		gettimeofday(&ct, NULL);
-		update_ttd(p, ct);
-		if (die_check(p))
-			break ;
-		if (*p->ml_pinrtf)
-			continue ;
-		if (pthread_mutex_lock(p->m_printf) == 0)
-		{
-			printf("%ld %d is eating\n", cal_ct(p->s_time, ct), p->pn);
-			pthread_mutex_unlock(p->m_printf);
-			break ;
-		}
-		else
-			continue ;
+		pthread_mutex_unlock(&p->lb->box);
+		return (0);
 	}
-	p->ttd = p->init_ttd;
+	p->lh = 0;
+	p->lb->status = 1;
+	pthread_mutex_unlock(&p->lb->box);
+	return (1);
 }
 
-void	eating(t_philo *p)
+static	int	put_down_rfork(t_philo *p)
+{
+	pthread_mutex_lock(&p->rb->box);
+	if (check_died(p))
+	{
+		pthread_mutex_unlock(&p->rb->box);
+		return (0);
+	}
+	p->rh = 0;
+	p->rb->status = 1;
+	pthread_mutex_unlock(&p->rb->box);
+	return (1);
+}
+
+static int	add_et(t_philo *p)
+{
+	pthread_mutex_lock(p->status.box);
+	if (p->status.d)
+	{
+		pthread_mutex_unlock(p->status.box);
+		return (0);
+	}
+	p->status.et++;
+	pthread_mutex_unlock(p->status.box);
+	if (!(p->pn % 2))
+	{
+		if (!(put_down_rfork(p) && put_down_lfork(p)))
+			return (0);
+	}
+	else
+	{
+		if (!(put_down_lfork(p) && put_down_rfork(p)))
+			return (0);
+	}
+	return (1);
+}
+
+int	eating(t_philo *p)
 {
 	struct timeval	et;
 	struct timeval	set;
 
 	gettimeofday(&set, NULL);
 	print_eating(p);
+	p->ttd = p->init_ttd;
 	while (1)
 	{
 		gettimeofday(&et, NULL);
 		update_ttd(p, et);
-		if (die_check(p))
-			return ;
+		if (check_died(p))
+			return (0);
 		if (cal_ct(set, et) >= p->tte)
-		{
-			while (1)
-			{
-				if (pthread_mutex_lock(p->m_et) == 0)
-				{
-					p->et++;
-					pthread_mutex_unlock(p->m_et);
-					return ;
-				}
-				else
-					continue ;
-			}
-		}
+			return (add_et(p));
 	}
 }

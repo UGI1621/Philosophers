@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 06:34:55 by saan              #+#    #+#             */
-/*   Updated: 2025/04/30 09:56:07 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:20:15 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	join_all_pthread(t_obs *obs, int pn)
 {
-	int	i;
-	t_philo *cur;
+	int		i;
+	t_philo	*cur;
 
 	i = -1;
 	cur = obs->head;
@@ -27,25 +27,27 @@ void	join_all_pthread(t_obs *obs, int pn)
 	pthread_join(obs->tid, NULL);
 }
 
-void	destroy_all_mutex(pthread_mutex_t *forks, int idx)
+void	destroy_all_mutex(t_obs *obs)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while (++i < idx)
-		pthread_mutex_destroy(&forks[i]);
-	free(forks);
+	while (++i < obs->ph_n)
+		pthread_mutex_destroy(&obs->forks[i].box);
+	free(obs->forks);
+	pthread_mutex_destroy(&obs->m_print);
+	pthread_mutex_destroy(&obs->m_stat);
 }
 
 void	free_all_nodes(t_obs *obs, int pn)
 {
-	t_philo *cur;
-	t_philo *temp;
-	int i;
+	t_philo	*cur;
+	t_philo	*temp;
+	int		i;
 
 	i = -1;
 	cur = obs->head;
-	while(++i < pn)
+	while (++i < pn)
 	{
 		temp = cur;
 		cur = temp->next;

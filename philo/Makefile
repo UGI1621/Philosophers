@@ -2,8 +2,9 @@ NAME = philo
 
 CC = cc
 
-# CFLAGS = -Wall -Wextra -Werror
-CFLAGS =
+# CFLAGS = -Wall -Wextra -Werror -fsanitize=thread -g
+# CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+CFLAGS = -Wall -Wextra -Werror -g
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -16,6 +17,12 @@ OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 INCLUDES = -I$(INC_DIR)
 
 all: $(NAME)
+
+# $(NAME): $(OBJS)
+# 	$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -fsanitize=thread -o $(NAME)
+
+# $(NAME): $(OBJS)
+# 	$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -fsanitize=address -o $(NAME)
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(INCLUDES) -o $(NAME)

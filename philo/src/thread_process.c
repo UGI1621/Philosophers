@@ -6,72 +6,66 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:33:29 by saan              #+#    #+#             */
-/*   Updated: 2025/05/24 15:03:57 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:04:30 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	count_et(t_obs *obs, t_philo *p)
+int	check_ready(t_ready *ready)
 {
-	int	i;
-	t_philo *cur;
-
-	i = -1;
-	cur = obs->head;
-	obs->ml_printf = 1;
-	while (++i < obs->ph_n)
+	pthread_mutex_lock(&ready->box);
+	if (ready->ready)
 	{
-		if (!(cur->et >= obs->met))
-		{
-			obs->ml_printf = 0;
-			return (0);
-		}
-		cur = cur->next;
+		pthread_mutex_unlock(&ready->box);
+		return (1);
 	}
-	i = -1;
-	while (++i < obs->ph_n)
-	{
-		set_die(cur);
-		cur = cur->next;
-	}
-	return (1);
+	pthread_mutex_unlock(&ready->box);
+	return (0);
 }
 
 void	*obs_routine(void *obs_unit)
 {
-	t_obs *obs;
-	t_philo *cur;
+	t_obs	*obs;
 
 	obs = (t_obs *)obs_unit;
-	cur = obs->head;
-	while(1)
+	while (1)
 	{
-		if(obs_die_check(obs))
-			return (NULL);
-		if (obs->met != -1 && count_et(obs, cur))
-			return (NULL);
-		cur = cur->next;
+		if (check_ready(&obs->ready))
+			break ;
 	}
-	return (NULL);
+	while (1)
+	{
+		if (check_end(obs))
+			return (NULL);
+	}
 }
 
 void	*routine(void *cur)
 {
-	t_philo *p;
-	struct timeval ct;
+	t_philo			*p;
+	struct timeval	ct;
 
 	p = (t_philo *)cur;
 	while (1)
 	{
+		if (check_ready(p->ready))
+			break ;
+	}
+	while (!check_died(p))
+	{
 		gettimeofday(&ct, NULL);
 		update_ttd(p, ct);
-		if (die_check(p))
+		if (!get_fork(p))
 			return (NULL);
-		if (thinking(p) == -1)
+		if (p->rh && p->lh)
+		{
+			if (!eating(p))
+				return (NULL);
+		}
+		if (!sleeping(p))
 			return (NULL);
-		// eating(p);
-		// sleeping(p);
+		print_thinking(p);
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: saan <saan@student.42gyeongsan.>           +#+  +:+       +#+        */
+/*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:49:53 by saan              #+#    #+#             */
-/*   Updated: 2025/04/27 07:30:14 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:22:29 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ static int	ft_isdigit(char c)
 int	ft_atoi(const char *nptr)
 {
 	long long	res;
-	int		sign_cnt;
-	int		ismin;
+	int			sign_cnt;
+	int			ismin;
 
 	res = 0;
 	sign_cnt = 0;
@@ -56,7 +56,7 @@ int	ft_atoi(const char *nptr)
 	while (ft_sign_check(*nptr, &sign_cnt, &ismin))
 		nptr++;
 	if (sign_cnt >= 2)
-		return (0);
+		return (-1);
 	while (ft_isdigit(*nptr))
 	{
 		res = (10 * res) + (*nptr - '0');

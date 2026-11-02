@@ -6,65 +6,76 @@
 /*   By: saan <saan@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 08:25:55 by saan              #+#    #+#             */
-/*   Updated: 2025/05/24 17:19:45 by saan             ###   ########.fr       */
+/*   Updated: 2025/06/16 19:05:02 by saan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	init_obs(t_obs *obs, int pn, int ac, char *av[])
+static int	init_mutex_forks(t_fork *forks, int pn)
 {
-	int i;
+	int	i;
 
+	i = -1;
+	while (++i < pn)
+	{
+		pthread_mutex_init(&forks[i].box, NULL);
+		forks[i].status = 1;
+	}
+	return (0);
+}
+
+int	init_obs(t_obs *obs, int pn, char *av[])
+{
+	pthread_mutex_init(&obs->ready.box, NULL);
+	obs->ready.ready = 0;
 	obs->head = NULL;
 	obs->tid = 0;
 	obs->ph_n = pn;
 	obs->met = -1;
 	if (av[5])
 		obs->met = ft_atoi(av[5]);
-	pthread_mutex_init(&obs->m_et, NULL);
-	obs->ml_printf = 0;
+	obs->l_print = 0;
 	obs->tail = NULL;
-	obs->is_lock = (int *)ft_calloc(pn, sizeof(int));
-	obs->forks = (pthread_mutex_t *)ft_calloc(pn, sizeof(pthread_mutex_t));
-	pthread_mutex_init(&obs->m_printf, NULL);
-	pthread_mutex_init(&obs->m_amid, NULL);
-
+	obs->forks = (t_fork *)ft_calloc(pn, sizeof(t_fork));
+	init_mutex_forks(obs->forks, pn);
+	pthread_mutex_init(&obs->m_print, NULL);
+	pthread_mutex_init(&obs->m_stat, NULL);
 	return (0);
 }
 
-static t_philo	*make_philo_node(t_obs *obs, int i, char *av[], struct timeval ct)
+static t_philo	*make_philo_node(t_obs *obs, int i, char *av[],
+		struct timeval ct)
 {
-	t_philo *cur;
+	t_philo	*cur;
 
 	cur = (t_philo *)ft_calloc(1, sizeof(t_philo));
+	cur->ready = &obs->ready;
+	cur->prev = NULL;
 	cur->tid = 0;
-	cur->s_time = ct;
-	cur->m_printf = &obs->m_printf;
-	cur->ml_pinrtf = &obs->ml_printf;
-	cur->amid = 0;
-	cur->m_amid = &obs->m_amid;
 	cur->pn = i + 1;
 	cur->ttd = ft_atoi(av[2]);
 	cur->init_ttd = cur->ttd;
 	cur->tte = ft_atoi(av[3]);
 	cur->tts = ft_atoi(av[4]);
-	cur->m_et = &obs->m_et;
-	cur->l_f = &obs->forks[i];
-	cur->r_f = &obs->forks[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
-	cur->ll_f = 0;
-	cur->lr_f = 0;
-	cur->et = 0;
-	cur->met = -1;
-	if (av[5])
-		cur->met = ft_atoi(av[5]);
+	cur->rh = 0;
+	cur->lh = 0;
+	cur->lb = &obs->forks[i];
+	cur->rb = &obs->forks[(i - 1 + ft_atoi(av[1])) % ft_atoi(av[1])];
+	cur->status.box = &obs->m_stat;
+	cur->status.et = 0;
+	cur->status.d = 0;
+	cur->print.l_print = &obs->l_print;
+	cur->print.box = &obs->m_print;
+	cur->s_time = ct;
+	cur->next = NULL;
 	return (cur);
 }
 
 int	init_cdll(t_obs *obs, char *av[], struct timeval ct)
 {
 	t_philo	*node;
-	int	i;
+	int		i;
 
 	i = -1;
 	while (++i < ft_atoi(av[1]))
